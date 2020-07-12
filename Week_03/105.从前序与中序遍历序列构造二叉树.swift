@@ -47,31 +47,31 @@
  *     }
  * }
  */
- class Solution {
-    var idx:Int = 0
+class Solution {
     func buildTree(_ preorder: [Int], _ inorder: [Int]) -> TreeNode? {
-        if inorder.count != preorder.count {return nil}
-        if inorder.count == 0 {return nil}
-        let root =  helper(inorder, preorder, idx, preorder.count - 1)
-        return root
-    }
-    
-    func helper(_ inorder: [Int], _ preorder: [Int], _ start:Int, _ end: Int)-> TreeNode? {
-        if start > end {return nil}
-        let node = TreeNode(preorder[idx])
-        idx += 1
-        if start == end { return node }
-        let index = findIdx(inorder, node.val, end)
-        node.left = helper(inorder, preorder, start, index-1)
-        node.right = helper(inorder, preorder, index+1, end)
-        return node
-    }
-    
-    func findIdx(_ inorder: [Int], _ val:Int, _ end:Int)->Int{
-        for i in (0...end).reversed(){
-            if inorder[i] == val{ return i }
+        guard preorder.count == inorder.count && inorder.count > 0  else {
+            return nil
         }
-        return 0
+        var map = [Int : Int]()
+        for (i, v) in inorder.enumerated() {
+            map[v] = i
+        }
+        return _buildItem(map, preorder, 0, preorder.count - 1, inorder, 0, inorder.count - 1)
+    }
+    
+    private func _buildItem(_ map: [Int : Int], _ preorder: [Int], _ p_start: Int, _ p_end: Int, _ inorder: [Int], _ i_start: Int, _ i_end: Int) -> TreeNode? {
+        if  p_end < p_start {
+            return nil
+        }
+        let root_val = preorder[p_start]
+        let res = TreeNode(root_val)
+        
+        let root_index = map[root_val] ?? 0
+        let leftCount = root_index - i_start
+        
+        res.left = _buildItem(map, preorder, p_start + 1, p_start + leftCount, inorder, i_start, root_index - 1)
+        res.right = _buildItem(map, preorder, p_start + leftCount + 1, p_end, inorder, root_index + 1, i_end)
+        return res
     }
 }
 // @lc code=end
