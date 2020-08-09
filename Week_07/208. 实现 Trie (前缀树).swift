@@ -1,36 +1,13 @@
-学习笔记
+//
+//  208. 实现 Trie (前缀树).swift
+//  INTERVIEW
+//
+//  Created by Scan on 2020/8/4.
+//  Copyright © 2020 钱志新. All rights reserved.
+//
 
-二叉树的层序遍历
-```swift
-func levelOrder(_ root: TreeNode?) -> [[Int]] {
-        guard root != nil else {
-            return []
-        }
-        var res = [[Int]]()
-        _level(root, 0, &res)
-        return res
-    }
+import Foundation
 
-    private func _level(_ root: TreeNode?, _ level: Int, _ res: inout [[Int]]) {
-        guard root != nil else {
-            return
-        }
-        if res.count == level {
-            let item = [Int]()
-            res.append(item)
-        }
-        res[level].append(root!.val)
-        if let left = root!.left {
-            _level(left, level + 1, &res)
-        }
-        if let right = root!.right {
-            _level(right, level + 1, &res)
-        }
-    }
-```
-
-Trie 树代码模板 swift
-```swift
 class Trie {
     private var root: TrieNode = TrieNode()
     private class TrieNode {
@@ -97,4 +74,3 @@ class Trie {
         return node
     }
 }
-```
